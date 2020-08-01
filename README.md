@@ -1,4 +1,4 @@
-# Turais Fork:
+# Turais-Smartplug-Fork
 
 * Added some examples
 * removed Python2 code (who uses python2 anyway...) ;)
