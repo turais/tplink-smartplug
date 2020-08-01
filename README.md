@@ -1,8 +1,19 @@
-# TP-Link WiFi SmartPlug Client and Wireshark Dissector
+# Turais Fork:
+
+* Added some examples
+* removed Python2 code (who uses python2 anyway...) ;)
+
+## Examples
+* Requesting Relay State
+* Scan Network for Devices and display info
+* Turn off all TP-Link Devices on Network ;)
+
+
+## TP-Link WiFi SmartPlug Client and Wireshark Dissector
 
 For the full story, see [Reverse Engineering the TP-Link HS110](https://www.softscheck.com/en/reverse-engineering-tp-link-hs110/)
 
-## tplink_smartplug.py ##
+### tplink_smartplug.py ###
 
 A python client for the proprietary TP-Link Smart Home protocol to control TP-Link HS100 and HS110 WiFi Smart Plugs.
 The SmartHome protocol runs on TCP port 9999 and uses a trivial XOR autokey encryption that provides no security. 
@@ -21,7 +32,7 @@ Instead of `null` we can also write `{}`. Commands can be nested, for example:
 A full list of commands is provided in [tplink-smarthome-commands.txt](tplink-smarthome-commands.txt).
 
 
-#### Usage ####
+##### Usage #####
 
    `./tplink_smartplug.py -t <ip> [-c <cmd> || -j <json>]`
 
@@ -44,13 +55,13 @@ Provide the target IP using `-t` and a command to send using either `-c` or `-j`
 
 More advanced commands such as creating or editing rules can be issued using the `-j` flag by providing the full JSON string for the command. Please consult [tplink-smarthome-commands.txt](tplink-smarthome-commands.txt) for a comprehensive list of commands.
 
-## Wireshark Dissector ##
+### Wireshark Dissector ###
 
 Wireshark dissector to decrypt TP-Link Smart Home Protocol packets (TCP port 9999).
 
 ![ScreenShot](wireshark-dissector.png)
 
-#### Installation ####
+##### Installation #####
 
 Copy [tplink-smarthome.lua](tplink-smarthome.lua) into:
 
@@ -59,7 +70,7 @@ Copy [tplink-smarthome.lua](tplink-smarthome.lua) into:
 | Windows     | %APPDATA%\Wireshark\plugins\ |
 | Linux/MacOS | $HOME/.wireshark/plugins     |
 
-## tddp-client.py ##
+### tddp-client.py ###
 
 A proof-of-concept python client to talk to a TP-Link device using the **TP-Link Device Debug Protocol (TDDP)**.
 
@@ -71,7 +82,7 @@ TDDP is a binary protocol documented in patent [CN102096654A](https://www.google
 Commands are issued by setting the appropriate values in the Type and SubType header fields.
 Data is returned DES-encrypted and requires the username and password of the device to decrypt. Likewise, configuration data to be written to the device needs to be sent encrypted. The DES key is constructed by taking the MD5 hash of username and password concatenated together, and then taking the first 8 bytes of the MD5 hash.
 
-#### Usage ####
+##### Usage #####
 
    `./tddp-client.py -t <ip> -u username -p password -c 0A`
 
@@ -79,7 +90,7 @@ Provide the target IP using -t. You can provide a username and password, otherwi
 
 Provide the command as a two-character hex string, e.g. -c 0A. What type of data a command might read out will be different for various TP-Link devices.
 
-#### Example ####
+##### Example #####
 Reading out the WAN link status on an Archer C9 in default configuration shows the link is down (0):
    ```
    ./tddp-client.py -t 192.168.0.1 -c 0E
