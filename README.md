@@ -3,6 +3,14 @@
 * Added some examples
 * removed Python2 code (who uses python2 anyway...) ;)
 
+Use it like this:
+```python
+import tplink_smartplug
+result = tplink_smartplug.send_v("192.168.1.42", 9999, 0.1, "off")
+if result:
+    pprint(result)
+```
+
 ## Examples
 * Requesting Relay State
 * Scan Network for Devices and display info
