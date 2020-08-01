@@ -70,10 +70,9 @@ if sys.version_info[0] > 2:
 
 def send(ip, port, command):
     cmd = commands[command]
-
     try:
         sock_tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock_tcp.settimeout(0.20)
+        sock_tcp.settimeout(1)
         sock_tcp.connect((ip, port))
         sock_tcp.send(encrypt(cmd))
         data = sock_tcp.recv(2048)
@@ -84,4 +83,23 @@ def send(ip, port, command):
         return json.loads(decrypted)
 
     except socket.error:
-        quit("Cound not connect to host " + ip + ":" + str(port))
+        print("Cound not connect to host " + ip + ":" + str(port))
+        return False
+
+
+def send_v(ip, port, timeout_in_s, command):
+    cmd = commands[command]
+    try:
+        sock_tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock_tcp.settimeout(timeout_in_s)
+        sock_tcp.connect((ip, port))
+        sock_tcp.send(encrypt(cmd))
+        data = sock_tcp.recv(2048)
+        sock_tcp.close()
+
+        decrypted = decrypt(data[4:])
+
+        return json.loads(decrypted)
+
+    except socket.error:
+        return False
