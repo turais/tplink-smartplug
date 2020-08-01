@@ -24,9 +24,7 @@ import socket
 import json
 from struct import pack
 
-
 version = 0.3
-
 
 # Predefined Smart Plug Commands
 # For a full list of commands, consult tplink_commands.txt
@@ -69,33 +67,13 @@ if sys.version_info[0] > 2:
             result += chr(a)
         return result
 
-# Python 2.x Version
-else:
-    def encrypt(string):
-        key = 171
-        result = pack('>I', len(string))
-        for i in string:
-            a = key ^ ord(i)
-            key = a
-            result += chr(a)
-        return result
-
-
-    def decrypt(string):
-        key = 171
-        result = ""
-        for i in string:
-            a = key ^ ord(i)
-            key = ord(i)
-            result += chr(a)
-        return result
-
 
 def send(ip, port, command):
     cmd = commands[command]
 
     try:
         sock_tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock_tcp.settimeout(0.20)
         sock_tcp.connect((ip, port))
         sock_tcp.send(encrypt(cmd))
         data = sock_tcp.recv(2048)
@@ -104,7 +82,6 @@ def send(ip, port, command):
         decrypted = decrypt(data[4:])
 
         return json.loads(decrypted)
-
 
     except socket.error:
         quit("Cound not connect to host " + ip + ":" + str(port))
